@@ -18,6 +18,8 @@ public class StudentService {
         Student studentById=studentRepository.findById(id).orElseThrow(()->new NoSuchElementException());
         getByName(studentById.getName());
         return studentById;
+
+
     }
 
     private void getByName(String name) {
