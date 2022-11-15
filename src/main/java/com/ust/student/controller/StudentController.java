@@ -1,4 +1,7 @@
 package com.ust.student.controller;
+import com.ust.student.Exception.BusinessException;
+import com.ust.student.Util.Util1;
+import com.ust.student.dto.StudentDTO;
 import com.ust.student.entity.Student;
 import com.ust.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,24 +11,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
 @RestController
 public class StudentController {
 
     @Autowired
     StudentService studentService;
     @GetMapping("/students/{id}")
-    public ResponseEntity<Student>get(@PathVariable Integer id) {
+    public ResponseEntity<StudentDTO>get(@PathVariable Integer id) {
         try {
             Student student = studentService.getStudentByID(id);
-            return new ResponseEntity<Student>(student, HttpStatus.OK);
+            student.setEmail(" ");
+            student.setPassword(" ");
+            return new ResponseEntity<StudentDTO>(studentService.convertToDTO(student), HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<StudentDTO>(HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/student")
     public ResponseEntity<Student>getRequest(@RequestParam(name="id") Integer id) {
         try {
             Student student = studentService.getStudentByID(id);
+
             return new ResponseEntity<Student>(student, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
@@ -43,9 +50,7 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public void add(@RequestBody Student student) {
-
-
+    public void add2(@RequestBody Student student) {
         studentService.saveStudent(student);
     }
     @DeleteMapping("/students/{id}")
@@ -56,6 +61,25 @@ public class StudentController {
     @PutMapping("/students")
     public void updateStudent(@RequestBody Student student){
         studentService.updateStudent(student);
+    }
+    @PostMapping("/student")
+    public ResponseEntity<Student> add(@RequestBody Student student){
+
+
+        try {
+
+
+
+
+
+                studentService.saveStudent(student);
+            return new ResponseEntity<Student>(student, HttpStatus.OK);
+
+
+        }
+        catch(BusinessException e){
+            return new ResponseEntity<Student>(HttpStatus.PRECONDITION_FAILED);
+        }
     }
 
 

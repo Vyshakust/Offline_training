@@ -1,8 +1,10 @@
 package com.ust.student.entity;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,7 +24,14 @@ public class Student {
     private LocalDateTime modifiedDate;
     private LocalDateTime date;
 
+    @NotNull
+    private String email;
+
+    @NotNull
+    private String password;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "student")
     private Set<Book> bookSet;
+
 
 }
