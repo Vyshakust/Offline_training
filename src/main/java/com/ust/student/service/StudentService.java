@@ -22,14 +22,26 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Student service.
+ */
 @Service
 public class StudentService {
 
+    /**
+     * The Student repository.
+     */
     @Autowired
     StudentRepository studentRepository;
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Gets student by id.
+     *
+     * @param id the id
+     * @return the student by id
+     */
     public Student getStudentByID(int id) {
 
         Student studentById=studentRepository.findById(id).orElseThrow(()->new NoSuchElementException());
@@ -45,14 +57,19 @@ public class StudentService {
         System.out.printf("Student roll number is >>>>>>        " + studentByName.getRollNo() );
     }
 
+    /**
+     * Save student.
+     *
+     * @param student the student
+     */
     public void saveStudent(Student student) {
         student.setModifiedDate(LocalDateTime.now());
         student.setDate(LocalDateTime.now());
         String email =student.getEmail();
         String password = student.getPassword();
 
-            int result = validateEmail(email);
-            int result1 = validatePassword(password);
+            int result = Util1.validateEmail(email);
+            int result1 = Util1.validatePassword(password);
             if (result == 0 && result1==0) {
                 student.setPassword(Util1.toHexString(Util1.getSHA(password)));
                 studentRepository.save(student);
@@ -67,17 +84,32 @@ public class StudentService {
 
     }
 
+    /**
+     * Gets student all.
+     *
+     * @return the student all
+     */
     public List<Student> getStudentAll() {
         return studentRepository.findAll();
     }
 
+    /**
+     * Delete student.
+     *
+     * @param id the id
+     */
     public void deleteStudent(Integer id) {
         studentRepository.deleteById(id);
     }
 
 
-
-        public Student updateStudent(Student student){
+    /**
+     * Update student student.
+     *
+     * @param student the student
+     * @return the student
+     */
+    public Student updateStudent(Student student){
             Student updateStudent=studentRepository.findById(student.getId()).orElseThrow(()->new NoSuchElementException());
             updateStudent.setName(student.getName());
             updateStudent.setRollNo(student.getRollNo());
@@ -86,31 +118,13 @@ public class StudentService {
             return updateStudent;
         }
 
-    public int validateEmail(String email) {
-        String regex = "^([A-Za-z0-9+_.-]+)@([A-Za-z0-9]+)\\.([a-z]+)$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(email);
-        if (matcher.matches() == true) {
-            return 0;
-        } else {
-            throw new InvalidEmail();
-        }
 
-
-    }
-
-    public int validatePassword(String password){
-        String regexPassword =  "^(?=(?:.*\\d){3,})(?=\\S+$)(?=.*[@#$%^&+=])(?=(?:.*[A-Za-z]){3,})(?=.*[A-Z]).{8,}$";
-        Pattern pattern = Pattern.compile(regexPassword);
-        Matcher matcher = pattern.matcher(password);
-        if (matcher.matches() == true) {
-            return 0;
-        } else {
-            throw new InvalidPassword();
-        }
-    }
-
-
+    /**
+     * Convert to dto student dto.
+     *
+     * @param student the student
+     * @return the student dto
+     */
     public StudentDTO convertToDTO(Student student) {
         return  modelMapper.map(student,StudentDTO.class);
     }

@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 
+/**
+ * The type Student dto.
+ */
 @Data
 public class StudentDTO {
     private int id;

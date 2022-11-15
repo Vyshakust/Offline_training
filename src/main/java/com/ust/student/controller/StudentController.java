@@ -12,11 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * The type Student controller.
+ */
 @RestController
 public class StudentController {
 
+    /**
+     * The Student service.
+     */
     @Autowired
     StudentService studentService;
+
+    /**
+     * Get response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentDTO>get(@PathVariable Integer id) {
         try {
@@ -28,6 +41,13 @@ public class StudentController {
             return new ResponseEntity<StudentDTO>(HttpStatus.NOT_FOUND);
         }
     }
+
+    /**
+     * Get request response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @GetMapping("/student")
     public ResponseEntity<Student>getRequest(@RequestParam(name="id") Integer id) {
         try {
@@ -38,6 +58,12 @@ public class StudentController {
             return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
         }
     }
+
+    /**
+     * Get 2 response entity.
+     *
+     * @return the response entity
+     */
     @GetMapping("/students")
     public ResponseEntity<List<Student>> get2(){
         try {
@@ -49,19 +75,42 @@ public class StudentController {
         }
     }
 
+    /**
+     * Add 2.
+     *
+     * @param student the student
+     */
     @PostMapping("/students")
     public void add2(@RequestBody Student student) {
         studentService.saveStudent(student);
     }
+
+    /**
+     * Delete.
+     *
+     * @param id the id
+     */
     @DeleteMapping("/students/{id}")
     public void delete(@PathVariable Integer id){
         studentService.deleteStudent(id);
     }
 
+    /**
+     * Update student.
+     *
+     * @param student the student
+     */
     @PutMapping("/students")
     public void updateStudent(@RequestBody Student student){
         studentService.updateStudent(student);
     }
+
+    /**
+     * Add response entity.
+     *
+     * @param student the student
+     * @return the response entity
+     */
     @PostMapping("/student")
     public ResponseEntity<Student> add(@RequestBody Student student){
 

@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * The type Student.
+ */
 @Entity
 @Data
 @Table(name = "student_ustbatch_mappedby")
